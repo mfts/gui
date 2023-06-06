@@ -230,12 +230,12 @@ const installPkg = async (pkg: GUIPackage, version?: string) => {
     await installPackage(pkg, versionToInstall);
     trackInstall(pkg.full_name);
 
+    // If the package was AVAILABLE previously then it was just installed, otherwise it was updated
+    const kind =
+      pkg.state === PackageStates.AVAILABLE ? "INSTALLED_SUCCESSFULLY" : "UPDATED_SUCCESSFULLY";
+    updatePackage(pkg.full_name, { displayState: { kind, version: versionToInstall } });
+
     await refreshSinglePackage(pkg.full_name);
-    if (pkg.state === PackageStates.AVAILABLE) {
-      updatePackage(pkg.full_name, {
-        displayState: { kind: "INSTALLED_SUCCESSFULLY", version: versionToInstall }
-      });
-    }
   } catch (error) {
     log.error(error);
     let message = "Unknown Error";

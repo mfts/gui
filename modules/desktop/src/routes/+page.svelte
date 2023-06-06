@@ -41,12 +41,12 @@
       }
     }
     updating = false;
-    sideMenuOption = SideMenuOptions.all;
   }
 
   $: needsUpdateCount = pkgsToUpdate.length;
 
   afterNavigate(({ to }) => {
+    console.log("******** afterNavigate", to)
     if (to?.url?.pathname === "/") {
       const tab = to.url.searchParams.get("tab");
       sideMenuOption = !tab ? SideMenuOptions.discover : (tab as SideMenuOptions);

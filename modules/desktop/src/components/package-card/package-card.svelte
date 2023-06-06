@@ -28,7 +28,11 @@
 </script>
 
 <div class="relative">
-  <section class="package-card relative h-auto border border-gray {layout}" class:active={isActive}>
+  <section
+    class="package-card relative h-auto border border-gray {layout}"
+    class:active={isActive}
+    class:updated={pkg.displayState?.kind === "UPDATED_SUCCESSFULLY"}
+  >
     <BgImage class="absolute left-0 top-0 h-full w-full" {layout} {pkg} />
 
     <a href={link} on:mousedown={activate} on:mouseup={deactivate} on:mouseleave={deactivate}>
@@ -43,16 +47,26 @@
           </div>
         </div>
         <div class="content-container absolute bottom-0 w-full {layout}">
-          <article class="card-thumb-label relative">
+          <article class="card-thumb-label">
             {#if layout === "bottom"}
-              <h3 class="text-bold font-mona text-2xl font-bold text-white line-clamp-1">
-                {fixPackageName(pkg.name)}
-              </h3>
+              <div class="flex items-center">
+                <h3 class="text-bold font-mona text-2xl font-bold text-white line-clamp-1">
+                  {fixPackageName(pkg.name)}
+                </h3>
+                {#if pkg.state === PackageStates.INSTALLED}
+                  <i class="ml-2 icon-check-circle-o flex mb-1 text-2xl text-[#00ffd0]" />
+                {/if}
+              </div>
               <p class="h-[32px] text-xs font-thin lowercase line-clamp-2">{pkg.desc ?? ""}</p>
             {:else}
-              <h3 class="text-bold mb-4 font-mona text-3xl font-bold text-white line-clamp-1">
-                {fixPackageName(pkg.name)}
-              </h3>
+              <div class="flex items-center mb-4">
+                <h3 class="text-bold font-mona text-3xl font-bold text-white line-clamp-1">
+                  {fixPackageName(pkg.name)}
+                </h3>
+                {#if pkg.state === PackageStates.INSTALLED}
+                  <i class="ml-2 icon-check-circle-o flex mb-1 text-3xl text-[#00ffd0]" />
+                {/if}
+              </div>
               <p class="line-clamp-[8] h-[160px] text-[14px] font-thin lowercase leading-[20px]">
                 {pkg.desc ?? ""}
               </p>
@@ -123,6 +137,15 @@
   section.package-card:active {
     border-color: #8000ff;
     box-shadow: 0px 0px 0px 2px rgba(128, 0, 255, 0.5);
+  }
+
+  section.package-card.updated {
+    border-color: #00ffd0;
+  }
+
+  section.package-card.updated:active {
+    border-color: #00ffd0;
+    box-shadow: 0px 0px 0px 2px rgba(0, 255, 208, 0.5);
   }
 
   .content-container {

@@ -38,7 +38,10 @@
       ].includes(pkg.state);
     },
     [SideMenuOptions.installed_updates_available]: (pkg: GUIPackage) => {
-      return [PackageStates.UPDATING, PackageStates.NEEDS_UPDATE].includes(pkg.state);
+      return (
+        [PackageStates.UPDATING, PackageStates.NEEDS_UPDATE].includes(pkg.state) ||
+        pkg.displayState?.kind === "UPDATED_SUCCESSFULLY"
+      );
     },
     [SideMenuOptions.recently_updated]: (pkg: GUIPackage) => {
       return moment(pkg.last_modified).isAfter(moment().subtract(30, "days"));

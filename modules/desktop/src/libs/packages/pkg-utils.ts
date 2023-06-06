@@ -1,6 +1,7 @@
 import log from "$libs/logger";
 import type { GUIPackage } from "$libs/types";
 import SemVer from "@teaxyz/lib/semver";
+import { t } from "$libs/translations";
 
 // Find a list of available versions for a package based on the bottles
 export const findAvailableVersions = (pkg: Pick<GUIPackage, "bottles" | "version">) => {
@@ -67,3 +68,12 @@ export const isPackageUpToDate = (pkg: GUIPackage) => {
   // if the installed version is equal or newer than the latest version, it's up to date
   return semverCompare(pkg.installed_versions[0], pkg.version) >= 0;
 };
+
+export const packageWasUpdated = (pkg: GUIPackage) => {
+  return pkg.displayState?.kind === "UPDATED_SUCCESSFULLY";
+}
+
+export const getPackageBadgeText = (pkg: GUIPackage) => {
+  const state = packageWasUpdated(pkg) ? "UPDATED" : pkg.state;
+  return t.get(`package.cta-${state}`);
+}
