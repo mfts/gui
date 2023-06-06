@@ -21,7 +21,7 @@ import {
 import { getReadme, getContributors, getRepoAsPackage } from "$libs/github";
 import { NotificationType } from "@tea/ui/types";
 import { trackInstall, trackInstallFailed } from "$libs/analytics";
-import { addInstalledVersion, isInstalling } from "$libs/packages/pkg-utils";
+import { addInstalledVersion, isInstalling, packageWasUpdated } from "$libs/packages/pkg-utils";
 import withDebounce from "$libs/utils/debounce";
 import { trimGithubSlug } from "$libs/github";
 import { notificationStore } from "$libs/stores";
@@ -364,6 +364,19 @@ const resetPackageDisplayState = (pkg: GUIPackage) => {
   });
 };
 
+//FIXME: this isn't great imho
+// TODO: BUT A BIG FAT COMMENT
+const resetAllPackagesUpdatedState = () => {
+  packageMap.update((pkgs) => {
+    Object.values(pkgs.packages).forEach((pkg) => {
+      if (packageWasUpdated(pkg)) {
+        pkg.displayState = null;
+      }
+    });
+    return pkgs;
+  });
+}
+
 export default {
   packageList,
   search: searchPackages,
@@ -374,5 +387,6 @@ export default {
   deletePkg,
   destroy,
   cachePkgImage,
-  resetPackageDisplayState
+  resetPackageDisplayState,
+  resetAllPackagesUpdatedState
 };

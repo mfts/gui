@@ -28,7 +28,7 @@
       const myConfetti = confetti.create(canvas, { resize: true });
       await myConfetti({ particleCount: 500, spread: 360, startVelocity: 20, gravity: 0.5 });
 
-      root.removeChild(canvas);
+      root?.removeChild(canvas);
       isAnimating = false;
     }
   };
